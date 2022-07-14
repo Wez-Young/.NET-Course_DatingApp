@@ -5,6 +5,7 @@
 /StudentAssets
 appsettings.json
 /.vscode
+ssl
 # User-specific files
 *.rsuser
 *.suo

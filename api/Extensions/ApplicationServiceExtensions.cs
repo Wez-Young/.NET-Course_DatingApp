@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace api.Extensions
 {
-    public static class ApplicationServiceExtentions
+    public static class ApplicationServiceExtensions
     {
         public static IServiceCollection AddAppServices(this IServiceCollection services, IConfiguration config)
         {

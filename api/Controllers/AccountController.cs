@@ -26,17 +26,24 @@ namespace api.Controllers
         [HttpPost("register")]
         public async Task<ActionResult<AppUser>> Register(RegisterDto registerDto)
         {
+            //Check if database already contains inputted username
             if (await UserExists(registerDto.Username)) return BadRequest("Username already exists!");
 
+            //initialise hashing algorithm
             using var hmac = new HMACSHA512();
+            //initialise new user based on recieved information
             var user = new AppUser
             {
+                //set username to lowercase for consistency
                 UserName = registerDto.Username.ToLower(),
+                //Encrypt the inputted password
                 PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDto.Password)),
                 PasswordSalt = hmac.Key,
             };
 
+            //Add user to the database
             _context.Users.Add(user);
+            //Save the changes to the database
             await _context.SaveChangesAsync();
 
             return user;
@@ -49,15 +56,18 @@ namespace api.Controllers
 
             if (user == null) return Unauthorized("Invalid username!");
 
+            //set the specified key data to the algorithm
             using var hmac = new HMACSHA512(user.PasswordSalt);
-
+            //Encrypt the inputted password with the algorithm
             var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(loginDto.Password));
 
+            //Check each character in inputted encrypted password and the stored one are the same
             for (int i = 0; i < computedHash.Length; i++)
             {
                 if (computedHash[i] != user.PasswordHash[i]) return Unauthorized("Invalid password!");
             }
 
+            //return username and generated token if successful
             return new UserDto
             {
                 Username = user.UserName,
@@ -65,6 +75,7 @@ namespace api.Controllers
             };
         }
 
+        //Check if the inputted username is unique
         private async Task<bool> UserExists(string username)
         {
             return await _context.Users.AnyAsync(user => user.UserName == username.ToLower());

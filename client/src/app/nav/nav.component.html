@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-primary">
     <div class="container">
         <div class="container-fluid">
             <a class="navbar-brand" routerLink="/" routerLinkActive="active">Dating R Us</a>
@@ -17,8 +17,8 @@
                 </ng-container>
 
             </ul>
-            <div class="dropdown" *ngIf="accountService.currentUser$ |async" dropdown>
-                <a class="dropdown-toggle text-light" dropdownToggle>Welcome user</a>
+            <div class="dropdown" *ngIf="(accountService.currentUser$ |async) as user" dropdown>
+                <a class="dropdown-toggle text-light" dropdownToggle>Welcome {{user.username | titlecase}}</a>
                 <div class="dropdown-menu mt-3" *dropdownMenu>
                     <a class="dropdown-item">Edit Profile</a>
                     <div class="dropdown-divider" style="margin: 5px;"></div>
@@ -31,7 +31,7 @@
                     placeholder="Username">
                 <input name="password" [(ngModel)]="model.password" class="form-control ml-2 mr-3" type="password"
                     placeholder="Password">
-                <button class="btn btn-outline-success" type="submit">Login</button>
+                <button class="btn btn-success" type="submit">Login</button>
             </form>
         </div>
     </div>

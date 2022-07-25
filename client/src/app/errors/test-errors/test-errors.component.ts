@@ -8,6 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TestErrorsComponent implements OnInit {
   baseUrl = 'https://localhost:5001/api/';
+  validationErrors: string[] = [];
 
   constructor(private http: HttpClient) { }
 
@@ -43,7 +44,10 @@ export class TestErrorsComponent implements OnInit {
   get400ValidationError() {
     this.http.post(this.baseUrl + 'account/register', {}).subscribe({
       next: response => { console.log(response); },
-      error: error => { console.log(error); }
+      error: error => {
+        console.log(error);
+        this.validationErrors = error;
+      }
     })
   }
 
